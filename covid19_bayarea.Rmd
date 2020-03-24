@@ -1,0 +1,238 @@
+---
+title: "COVID-19 in the CA Bay Area"
+output:
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+
+# read in data
+bay <-read_csv("covid19_bayarea.csv")
+bay$date <- as.Date(bay$date, format = "%Y-%m-%d")
+
+sf <- filter(bay, county == "San Francisco") 
+scc <- filter(bay, county == "Santa Clara")
+santacruz <- filter(bay, county == "Santa Cruz")
+
+```
+
+All Counties
+===================================== 
+
+**Note:** Work in progress - more counties to come soon
+
+### Confirmed Cases
+```{r}
+bay_total_chart <- ggplot(bay, aes(x = date,
+                                   y = infected_total,
+                                   color = county,
+                                   text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                                 "<b>Total cases: </b>", infected_total, "<br>",
+                                                 "<b>Additional cases today: </b>", infected_diff),
+                                   group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(palette = "Set1",
+                   name="",
+                   breaks=c("San Francisco", "Santa Clara", "Santa Cruz"))
+
+
+ggplotly(bay_total_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+San Francisco
+===================================== 
+
+### Confirmed Cases
+```{r}
+sf_total_chart <- ggplot(sf, aes(x = date,
+                                 y = infected_total,
+                                 text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                               "<b>Total cases: </b>", infected_total, "<br>",
+                                               "<b>Additional cases today: </b>", infected_diff),
+                                 group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_point(color = "#e41a1c") +
+  geom_line(color = "#e41a1c")
+
+ggplotly(sf_total_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Additional cases by day
+
+```{r}
+sf_total_col <- ggplot(sf, aes(x = date,
+                               y = infected_diff,
+                               text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                             "<b>Additional cases today: </b>", infected_diff),
+                               group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_col(fill = "#e41a1c")
+
+ggplotly(sf_total_col, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Deaths
+
+None Reported 
+
+Santa Clara
+===================================== 
+
+### Confirmed Cases
+```{r}
+scc_total_chart <- ggplot(scc, aes(x = date,
+                                   y = infected_total,
+                                   text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                                 "<b>Total cases: </b>", infected_total, "<br>",
+                                                 "<b>Additional cases today: </b>", infected_diff),
+                                   group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_point(color = "#377eb8") +
+  geom_line(color = "#377eb8")
+
+ggplotly(scc_total_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Additional cases by day
+
+```{r}
+scc_total_col <- ggplot(scc, aes(x = date,
+                                 y = infected_diff,
+                                 text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                               "<b>Additional cases today: </b>", infected_diff),
+                                 group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_col(fill = "#377eb8")
+
+ggplotly(scc_total_col, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Deaths
+```{r}
+scc_death_chart <- ggplot(scc, aes(x = date,
+                                   y = death_total)) +
+  xlab("") +
+  ylab("Deaths") +
+  theme_minimal(base_size = 14) +
+  geom_point(data = filter(scc, death_diff > 0),
+             aes(text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                               "<b>Total deaths: </b>", death_total, "<br>",
+                               "<b>Additional deaths today: </b>", death_diff, "<br>",
+                               "<b>Details: </b><br>  ", note),
+                 group = 1),
+             color = "gray50") +
+  geom_line(color = "gray50")
+
+ggplotly(scc_death_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+
+Santa Cruz
+===================================== 
+
+### Confirmed Cases
+```{r}
+santacruz_total_chart <- ggplot(santacruz, aes(x = date,
+                                               y = infected_total,
+                                               text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                                             "<b>Total cases: </b>", infected_total, "<br>",
+                                                             "<b>Additional cases today: </b>", infected_diff),
+                                               group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_point(color = "#4daf4a") +
+  geom_line(color = "#4daf4a")
+
+ggplotly(santacruz_total_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Additional cases by day
+
+```{r}
+santacruz_total_col <- ggplot(santacruz, aes(x = date,
+                                             y = infected_diff,
+                                             text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                                           "<b>Additional cases today: </b>", infected_diff),
+                                             group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_col(fill = "#4daf4a")
+
+ggplotly(santacruz_total_col, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Deaths
+
+None reported
+
+Sources
+===================================== 
+
+By [Jack J. Lee](https://www.jackjleescience.com)
+
+**All Counties**
+
+* Cases tracked by [NBC Bay Area](https://www.nbcbayarea.com/news/coronavirus/list-of-coronavirus-cases-in-the-bay-area/2248581/)
+* Data from the [LA Times coronavirus project](https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/) saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.latimes.com/projects/california-coronavirus-cases-tracking-outbreak/)
+* Data from the [SF Chronicle coronavirus map](https://projects.sfchronicle.com/2020/coronavirus-map/
+)
+
+**San Francisco**
+
+* [Press releases](https://www.sfdph.org/dph/alerts/coronavirus-pressreleases.asp) by the San Francisco Department of Public Health
+* [Current numbers](https://www.sfdph.org/dph/alerts/coronavirus.asp) from the San Francisco Department of Public Health
+* Past numbers from the San Francisco Department of Public Health saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.sfdph.org/dph/alerts/coronavirus.asp)
+* Last updated using data from March 24, 2020
+
+**Santa Clara**
+
+* [Tweets](https://twitter.com/HealthySCC) and [press releases](https://www.sccgov.org/sites/phd/news/Pages/newsroom.aspx) by the County of Santa Clara Public Health Department
+* [Current numbers](https://www.sccgov.org/sites/phd/DiseaseInformation/novel-coronavirus/Pages/home.aspx) from the  County of Santa Clara Public Health Department
+* Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
+* Last updated using data from March 24, 2020
+
+**Santa Cruz**
+
+* Coronavirus reporting by the [Santa Cruz Sentinel](https://www.santacruzsentinel.com/tag/coronavirus/)
+* [Current numbers](http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth.aspx) from the County of Santa Cruz Health Services Agency
+* Past numbers from the County of Santa Cruz Health Services Agency saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/CommunicableDiseaseControl/Coronavirus.aspx)
+* Last updated using data from March 24, 2020
+
+
+
+
