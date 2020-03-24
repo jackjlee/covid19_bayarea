@@ -205,6 +205,8 @@ Sources
 
 By [Jack J. Lee](https://www.jackjleescience.com)
 
+Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
+
 **All Counties**
 
 * Cases tracked by [NBC Bay Area](https://www.nbcbayarea.com/news/coronavirus/list-of-coronavirus-cases-in-the-bay-area/2248581/)
