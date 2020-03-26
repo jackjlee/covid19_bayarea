@@ -15,18 +15,28 @@ library(plotly)
 bay <-read_csv("covid19_bayarea.csv")
 bay$date <- as.Date(bay$date, format = "%Y-%m-%d")
 
+#alameda <- filter(bay, county == "Alameda" | county == "Berkeley") %>%
+#  group_by(date) %>%
+#  summarize(infected_total = sum(infected_total),
+#            infected_diff = sum(infected_diff),
+#            death_total = sum(death_total),
+#            death_diff = sum(death_diff),
+#            note = max(note))
+cc  <- filter(bay, county == "Contra Costa")
 sf <- filter(bay, county == "San Francisco") 
 scc <- filter(bay, county == "Santa Clara")
 santacruz <- filter(bay, county == "Santa Cruz")
 
 ```
 
-All Counties
+All Counties 
 ===================================== 
 
 **Note:** Work in progress - more counties to come soon
 
-### Confirmed Cases
+Column {.tabset}
+-------------------------------------
+### Confirmed Cases - Linear Scale
 ```{r}
 bay_total_chart <- ggplot(bay, aes(x = date,
                                    y = infected_total,
@@ -42,11 +52,101 @@ bay_total_chart <- ggplot(bay, aes(x = date,
   geom_line() +
   scale_color_brewer(palette = "Set1",
                    name="",
-                   breaks=c("San Francisco", "Santa Clara", "Santa Cruz"))
+                   breaks=c("Contra Costa","San Francisco", "Santa Clara", "Santa Cruz"))
 
 
 ggplotly(bay_total_chart, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Confirmed Cases - Log Scale
+
+```{r}
+bay_total_log <- ggplot(bay, aes(x = date,
+                                 y = infected_total,
+                                 color = county,
+                                 text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                               "<b>Total cases: </b>", infected_total, "<br>",
+                                               "<b>Additional cases today: </b>", infected_diff),
+                                 group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  scale_y_continuous(trans = "log10")  +
+  theme_minimal(base_size = 14) +
+  geom_point() +
+  geom_line() +
+  scale_color_brewer(palette = "Set1",
+                   name="",
+                   breaks=c("Contra Costa","San Francisco", "Santa Clara", "Santa Cruz"))
+
+ggplotly(bay_total_log, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Confirmed Cases - Normalized
+
+Coming soon
+
+Contra Costa
+===================================== 
+
+### Confirmed Cases
+```{r}
+cc_total_chart <- ggplot(cc, aes(x = date,
+                                 y = infected_total,
+                                 text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                               "<b>Total cases: </b>", infected_total, "<br>",
+                                               "<b>Additional cases today: </b>", infected_diff),
+                                 group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_point(color = "#e41a1c") +
+  geom_line(color = "#e41a1c")
+
+ggplotly(cc_total_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Additional cases by day
+
+```{r}
+cc_total_col <- ggplot(cc, aes(x = date,
+                               y = infected_diff,
+                               text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                             "<b>Additional cases today: </b>", infected_diff),
+                               group = 1)) +
+  xlab("") +
+  ylab("Confirmed cases") +
+  theme_minimal(base_size = 14) +
+  geom_col(fill = "#e41a1c")
+
+ggplotly(cc_total_col, tooltip = "text") %>%
+  config(displayModeBar = FALSE)  %>%
+  layout(hoverlabel = list(align = "left"))
+```
+
+### Deaths
+```{r}
+cc_death_chart <- ggplot(cc, aes(x = date,
+                                  y = death_total)) +
+  xlab("") +
+  ylab("Deaths") +
+  theme_minimal(base_size = 14) +
+  geom_point(data = filter(cc, death_diff > 0),
+             aes(text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                               "<b>Total deaths: </b>", death_total, "<br>",
+                               "<b>Additional deaths today: </b>", death_diff, "<br>",
+                               "<b>Details: </b><br>  ", note),
+                 group = 1),
+             color = "gray50") +
+  geom_line(color = "gray50")
+
+ggplotly(cc_death_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE) %>%
   layout(hoverlabel = list(align = "left"))
 ```
 
@@ -64,8 +164,8 @@ sf_total_chart <- ggplot(sf, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_point(color = "#e41a1c") +
-  geom_line(color = "#e41a1c")
+  geom_point(color = "#377eb8") +
+  geom_line(color = "#377eb8")
 
 ggplotly(sf_total_chart, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -83,7 +183,7 @@ sf_total_col <- ggplot(sf, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_col(fill = "#e41a1c")
+  geom_col(fill = "#377eb8")
 
 ggplotly(sf_total_col, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -91,8 +191,25 @@ ggplotly(sf_total_col, tooltip = "text") %>%
 ```
 
 ### Deaths
+```{r}
+sf_death_chart <- ggplot(sf, aes(x = date,
+                                  y = death_total)) +
+  xlab("") +
+  ylab("Deaths") +
+  theme_minimal(base_size = 14) +
+  geom_point(data = filter(sf, death_diff > 0),
+             aes(text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                               "<b>Total deaths: </b>", death_total, "<br>",
+                               "<b>Additional deaths today: </b>", death_diff, "<br>",
+                               "<b>Details: </b><br>  ", note),
+                 group = 1),
+             color = "gray50") +
+  geom_line(color = "gray50")
 
-None Reported 
+ggplotly(sf_death_chart, tooltip = "text") %>%
+  config(displayModeBar = FALSE) %>%
+  layout(hoverlabel = list(align = "left"))
+```
 
 Santa Clara
 ===================================== 
@@ -108,8 +225,8 @@ scc_total_chart <- ggplot(scc, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_point(color = "#377eb8") +
-  geom_line(color = "#377eb8")
+  geom_point(color = "#4daf4a") +
+  geom_line(color = "#4daf4a")
 
 ggplotly(scc_total_chart, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -127,7 +244,7 @@ scc_total_col <- ggplot(scc, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_col(fill = "#377eb8")
+  geom_col(fill = "#4daf4a")
 
 ggplotly(scc_total_col, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -170,8 +287,8 @@ santacruz_total_chart <- ggplot(santacruz, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_point(color = "#4daf4a") +
-  geom_line(color = "#4daf4a")
+  geom_point(color = "#984ea3") +
+  geom_line(color = "#984ea3")
 
 ggplotly(santacruz_total_chart, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -189,7 +306,7 @@ santacruz_total_col <- ggplot(santacruz, aes(x = date,
   xlab("") +
   ylab("Confirmed cases") +
   theme_minimal(base_size = 14) +
-  geom_col(fill = "#4daf4a")
+  geom_col(fill = "#984ea3")
 
 ggplotly(santacruz_total_col, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -214,27 +331,31 @@ Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
 * Data from the [SF Chronicle coronavirus map](https://projects.sfchronicle.com/2020/coronavirus-map/
 )
 
+
+**Contra Costa**
+
+* [Current numbers](https://www.coronavirus.cchealth.org/) from the Contra Costa Health Services
+* Past numbers from the Contra Costa Health Services saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.coronavirus.cchealth.org/)
+* Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
+* Last updated using data from March 25, 2020
+
 **San Francisco**
 
 * [Press releases](https://www.sfdph.org/dph/alerts/coronavirus-pressreleases.asp) by the San Francisco Department of Public Health
 * [Current numbers](https://www.sfdph.org/dph/alerts/coronavirus.asp) from the San Francisco Department of Public Health
 * Past numbers from the San Francisco Department of Public Health saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.sfdph.org/dph/alerts/coronavirus.asp)
-* Last updated using data from March 24, 2020
+* Last updated using data from March 25, 2020
 
 **Santa Clara**
 
 * [Tweets](https://twitter.com/HealthySCC) and [press releases](https://www.sccgov.org/sites/phd/news/Pages/newsroom.aspx) by the County of Santa Clara Public Health Department
 * [Current numbers](https://www.sccgov.org/sites/phd/DiseaseInformation/novel-coronavirus/Pages/home.aspx) from the  County of Santa Clara Public Health Department
 * Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-* Last updated using data from March 24, 2020
+* Last updated using data from March 25, 2020
 
 **Santa Cruz**
 
 * Coronavirus reporting by the [Santa Cruz Sentinel](https://www.santacruzsentinel.com/tag/coronavirus/)
 * [Current numbers](http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth.aspx) from the County of Santa Cruz Health Services Agency
 * Past numbers from the County of Santa Cruz Health Services Agency saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/CommunicableDiseaseControl/Coronavirus.aspx)
-* Last updated using data from March 24, 2020
-
-
-
-
+* Last updated using data from March 25, 2020
