@@ -20,12 +20,15 @@ bay$date <- as.Date(bay$date, format = "%Y-%m-%d")
 # ac_all <- filter(bay, county == "Alameda County" | county == "Berkeley")
 ac <- filter(bay, county == "Alameda")
 cc <- filter(bay, county == "Contra Costa")
-sf <- filter(bay, county == "San Francisco") 
+mc <- filter(bay, county == "Marin")
+nc <- filter(bay, county == "Napa")
+sf <- filter(bay, county == "San Francisco")
 sm <- filter(bay, county == "San Mateo")
 scc <- filter(bay, county == "Santa Clara")
 scz <- filter(bay, county == "Santa Cruz")
+son <- filter(bay, county == "Sonoma")
 
-bay_for_plot <- rbind(ac, cc, sf, sm, scc, scz)
+bay_for_plot <- rbind(ac, cc, mc, nc, sf, sm, scc, scz, son)
 
 # Whisker template for total cases (reusing for diff counties)
 template_tot <-
@@ -90,15 +93,18 @@ ggplotly({{county_abbv}}_deaths, tooltip = "text") %>%
 # Data for plots
 ac_data <- list(county_abbv = "ac", county_color = "#e41a1c")
 cc_data <- list(county_abbv = "cc", county_color = "#377eb8")
-sf_data <- list(county_abbv = "sf", county_color = "#4daf4a")
-sm_data <- list(county_abbv = "sm", county_color = "#984ea3")
-scc_data <- list(county_abbv = "scc", county_color = "#ff7f00")
-scz_data  <- list(county_abbv = "scz", county_color = "#ffff33")
+mc_data <- list(county_abbv = "mc", county_color = "#4daf4a")
+nc_data <- list(county_abbv = "nc", county_color = "#984ea3")
+sf_data <- list(county_abbv = "sf", county_color = "#ff7f00")
+sm_data <- list(county_abbv = "sm", county_color = "#ffff33")
+scc_data <- list(county_abbv = "scc", county_color = "#a65628")
+scz_data <- list(county_abbv = "scz", county_color = "#f781bf")
+son_data <- list(county_abbv = "son", county_color = "#999999")
 
 ```
 
-All Counties 
-===================================== 
+All Counties
+=====================================
 
 **Note:** Work in progress - more counties to come soon
 
@@ -109,7 +115,8 @@ Column {.tabset}
 bay_total_chart <- ggplot(bay_for_plot, aes(x = date,
                                    y = infected_total,
                                    color = county,
-                                   text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                   text = paste0("<b>County: </b>", county, "<br>",
+                                                 "<b>Date: </b>", format(date, format = "%b %d"), "<br>",
                                                  "<b>Total cases: </b>", infected_total, "<br>",
                                                  "<b>Additional cases today: </b>", infected_diff),
                                    group = 1)) +
@@ -122,10 +129,13 @@ bay_total_chart <- ggplot(bay_for_plot, aes(x = date,
                    name="",
                    breaks=c("Alameda",
                             "Contra Costa",
+                            "Marin",
+                            "Napa",
                             "San Francisco",
-                            "San Mateo", 
-                            "Santa Clara", 
-                            "Santa Cruz"))
+                            "San Mateo",
+                            "Santa Clara",
+                            "Santa Cruz",
+                            "Sonoma"))
 
 ggplotly(bay_total_chart, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -138,7 +148,8 @@ ggplotly(bay_total_chart, tooltip = "text") %>%
 bay_total_log <- ggplot(bay_for_plot, aes(x = date,
                                  y = infected_total,
                                  color = county,
-                                 text = paste0("<b>Date: </b>", format(date, format = "%b %d"), "<br>",
+                                 text = paste0("<b>County: </b>", county, "<br>",
+                                               "<b>Date: </b>", format(date, format = "%b %d"), "<br>",
                                                "<b>Total cases: </b>", infected_total, "<br>",
                                                "<b>Additional cases today: </b>", infected_diff),
                                  group = 1)) +
@@ -152,10 +163,13 @@ bay_total_log <- ggplot(bay_for_plot, aes(x = date,
                    name="",
                    breaks=c("Alameda",
                             "Contra Costa",
+                            "Marin",
+                            "Napa",
                             "San Francisco",
-                            "San Mateo", 
-                            "Santa Clara", 
-                            "Santa Cruz"))
+                            "San Mateo",
+                            "Santa Clara",
+                            "Santa Cruz",
+                            "Sonoma"))
 
 ggplotly(bay_total_log, tooltip = "text") %>%
   config(displayModeBar = FALSE)  %>%
@@ -167,7 +181,7 @@ ggplotly(bay_total_log, tooltip = "text") %>%
 Coming soon
 
 Alameda
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -189,7 +203,7 @@ eval(parse(text=ac_deaths_plot))
 ```
 
 Contra Costa
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -210,8 +224,50 @@ cc_deaths_plot <- whisker.render(template_deaths,cc_data)
 eval(parse(text=cc_deaths_plot))
 ```
 
+Marin
+=====================================
+
+### Confirmed Cases
+```{r}
+mc_tot_plot <- whisker.render(template_tot,mc_data)
+eval(parse(text=mc_tot_plot))
+```
+
+### Additional cases by day
+
+```{r}
+mc_new_plot <- whisker.render(template_new,mc_data)
+eval(parse(text=mc_new_plot))
+```
+
+### Deaths
+```{r}
+mc_deaths_plot <- whisker.render(template_deaths,mc_data)
+eval(parse(text=mc_deaths_plot))
+```
+
+Napa
+=====================================
+
+### Confirmed Cases
+```{r}
+nc_tot_plot <- whisker.render(template_tot,nc_data)
+eval(parse(text=nc_tot_plot))
+```
+
+### Additional cases by day
+
+```{r}
+nc_new_plot <- whisker.render(template_new,nc_data)
+eval(parse(text=nc_new_plot))
+```
+
+### Deaths
+
+None reported
+
 San Francisco
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -233,7 +289,7 @@ eval(parse(text=sf_deaths_plot))
 ```
 
 San Mateo
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -255,7 +311,7 @@ eval(parse(text=sm_deaths_plot))
 ```
 
 Santa Clara
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -277,7 +333,7 @@ eval(parse(text=scc_deaths_plot))
 ```
 
 Santa Cruz
-===================================== 
+=====================================
 
 ### Confirmed Cases
 ```{r}
@@ -296,8 +352,28 @@ eval(parse(text=scz_new_plot))
 
 None reported
 
+Sonoma
+=====================================
+
+### Confirmed Cases
+```{r}
+son_tot_plot <- whisker.render(template_tot,son_data)
+eval(parse(text=son_tot_plot))
+```
+
+### Additional cases by day
+
+```{r}
+son_new_plot <- whisker.render(template_new,son_data)
+eval(parse(text=son_new_plot))
+```
+
+### Deaths
+
+None reported
+
 Sources
-===================================== 
+=====================================
 
 By [Jack J. Lee](https://www.jackjleescience.com)
 
@@ -318,37 +394,58 @@ Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
   - Past numbers from the Alameda County Public Health Department, saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.acphd.org/2019-ncov.aspx)
   - [Press releases](http://www.acphd.org/2019-ncov/press-releases.aspx) by the Alameda County Public Health Department
   - Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-  - Last updated using data from March 26, 2020
+  - Last updated using data from March 27, 2020
 * City of Berkeley
   - [Current numbers](https://www.cityofberkeley.info/covid19/) from the Public Health Division
   - [Coronavirus news](https://www.cityofberkeley.info/coronavirus-news/) provided by the Public Health Division
   - Reporting by [Berkeleyside](https://www.berkeleyside.com/)
-  - Last updated using data from March 26, 2020
+  - Last updated using data from March 27, 2020
 
 **Contra Costa**
 
 * [Current numbers](https://www.coronavirus.cchealth.org/) from the Contra Costa Health Services
 * Past numbers from the Contra Costa Health Services, saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.coronavirus.cchealth.org/)
 * Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
+* Last updated using data from March 27, 2020
+
+**Marin**
+
+* [Coronavirus status updates](https://coronavirus.marinhhs.org/surveillance) provided daily by Marin Health and Human Services
+* Last updated using data from March 27, 2020
+
+**Napa**
+
+* [Coronavirus (COVID-19) Report](https://legacy.livestories.com/s/v2/coronavirus-report-for-napa-county-ca/9065d62d-f5a6-445f-b2a9-b7cf30b846dd/) provided by Napa County
+* [Situation updates](https://www.countyofnapa.org/2770/Situation-Updates) provided by Napa County Public Health
 * Last updated using data from March 26, 2020
 
 **San Francisco**
 
-* [Press releases](https://www.sfdph.org/dph/alerts/coronavirus-pressreleases.asp) by the San Francisco Department of Public Health
 * [Current numbers](https://www.sfdph.org/dph/alerts/coronavirus.asp) from the San Francisco Department of Public Health
 * Past numbers from the San Francisco Department of Public Health, saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.sfdph.org/dph/alerts/coronavirus.asp)
-* Last updated using data from March 26, 2020
+* [Press releases](https://www.sfdph.org/dph/alerts/coronavirus-pressreleases.asp) by the San Francisco Department of Public Health
+* Last updated using data from March 27, 2020
+
+**San Mateo**
+
+* [Current numbers](https://www.smchealth.org/coronavirus) from San Mateo County Health
+* Past numbers from San Mateo County Health, saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.smchealth.org/coronavirus)
+* Last updated using data from March 27, 2020
 
 **Santa Clara**
 
-* [Tweets](https://twitter.com/HealthySCC) and [press releases](https://www.sccgov.org/sites/phd/news/Pages/newsroom.aspx) by the County of Santa Clara Public Health Department
 * [Current numbers](https://www.sccgov.org/sites/phd/DiseaseInformation/novel-coronavirus/Pages/home.aspx) from the  County of Santa Clara Public Health Department
+* [Tweets](https://twitter.com/HealthySCC) and [press releases](https://www.sccgov.org/sites/phd/news/Pages/newsroom.aspx) by the County of Santa Clara Public Health Department
 * Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-* Last updated using data from March 26, 2020
+* Last updated using data from March 27, 2020
 
 **Santa Cruz**
 
-* Coronavirus reporting by the [Santa Cruz Sentinel](https://www.santacruzsentinel.com/tag/coronavirus/)
 * [Current numbers](http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth.aspx) from the County of Santa Cruz Health Services Agency
 * Past numbers from the County of Santa Cruz Health Services Agency, saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/CommunicableDiseaseControl/Coronavirus.aspx)
-* Last updated using data from March 26, 2020
+* Coronavirus reporting by the [Santa Cruz Sentinel](https://www.santacruzsentinel.com/tag/coronavirus/)
+* Last updated using data from March 27, 2020
+
+**Sonoma**
+* [Coronavirus Cases Dashboard ](https://socoemergency.org/emergency/novel-coronavirus/resources-information/dashboard/) provided by the County of Sonoma
+* Last updated using data from March 27, 2020
