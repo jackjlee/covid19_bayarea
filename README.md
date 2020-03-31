@@ -2,6 +2,8 @@
 
 * R code and data used to create a [flexdashboard dash](https://www.jackjleescience.com/dataviz/covid19_bayarea.html)
 
-* CSV file contains daily information about COVID-19 cases and deaths
+* covid_bayarea.csv file contains daily information about COVID-19 cases and deaths
 
-* Data last updated on March 24, 2020
+* pop_bayarea.csv file contains population estimates for each county (used to normalize data)
+
+* Data last updated on March 30, 2020
