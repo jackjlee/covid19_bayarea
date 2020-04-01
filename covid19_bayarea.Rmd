@@ -367,8 +367,10 @@ eval(parse(text=nc_new_plot))
 ```
 
 ### Deaths
-
-None reported
+```{r}
+nc_deaths_plot <- whisker.render(template_deaths,nc_data)
+eval(parse(text=nc_deaths_plot))
+```
 
 San Francisco
 =====================================
