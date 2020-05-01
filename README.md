@@ -6,4 +6,4 @@
 
 * pop_bayarea.csv file contains population estimates for each county (used to normalize data)
 
-* Data last updated on April 29, 2020
+* Data last updated on April 30, 2020
