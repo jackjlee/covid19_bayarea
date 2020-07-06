@@ -529,20 +529,20 @@ Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
   - Past numbers from the Alameda County Public Health Department, saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.acphd.org/2019-ncov.aspx)
   - [Press releases](http://www.acphd.org/2019-ncov/press-releases.aspx) by the Alameda County Public Health Department
   - Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-  - Last updated using data from July 4, 2020
+  - Last updated using data from July 5, 2020
 * City of Berkeley
   - [Dashboard](https://www.cityofberkeley.info/covid19-data/)
   - [COVID-19 page](https://www.cityofberkeley.info/covid19/) from the Public Health Division
   - [Coronavirus news](https://www.cityofberkeley.info/coronavirus-news/) provided by the Public Health Division
   - Reporting by [Berkeleyside](https://www.berkeleyside.com/)
-  - Last updated using data from July 4, 2020
+  - Last updated using data from July 5, 2020
 
 **Contra Costa**
 
 * [Current numbers](https://www.coronavirus.cchealth.org/) from the Contra Costa Health Services
 * Past numbers from the Contra Costa Health Services, saved by the [Wayback Machine](https://web.archive.org/web/*/https://www.coronavirus.cchealth.org/)
 * Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-* Last updated using data from July 4, 2020
+* Last updated using data from July 5, 2020
 
 **Marin**
 
@@ -552,7 +552,7 @@ Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
 **Monterey**
 
 * [COVID-19 media page](https://www.co.monterey.ca.us/government/departments-a-h/health/diseases/2019-novel-coronavirus-2019-ncov/covid-19-related-press-releases) maintained by the County of Monterey Health Department ("Daily Situational Report")
-* Last updated using data from July 4, 2020 (numbers labeled as July 3)
+* Last updated using data from July 5, 2020 (numbers labeled as July 4)
 
 **Napa**
 
@@ -579,14 +579,14 @@ Files available on [Github](https://github.com/jackjlee/covid19_bayarea)
 * [Coronavirus (COVID-19) Data Dashboard](https://www.sccgov.org/sites/covid19/Pages/dashboard.aspx) from the County of Santa Clara Public Health Department
 * [Tweets](https://twitter.com/HealthySCC) and [press releases](https://www.sccgov.org/sites/phd/news/Pages/newsroom.aspx) by the County of Santa Clara Public Health Department
 * Coronavirus reporting by the [Mercury News](https://www.mercurynews.com/tag/coronavirus/)
-* Last updated using data from July 4, 2020
+* Last updated using data from July 5, 2020
 
 **Santa Cruz**
 
 * [Coronavirus page](http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/CommunicableDiseaseControl/Coronavirus.aspx) maintained by the County of Santa Cruz Health Services Agency
 * Previously, numbers on the Health Services Agency page, saved by the [Wayback Machine](https://web.archive.org/web/*/http://www.santacruzhealth.org/HSAHome/HSADivisions/PublicHealth/CommunicableDiseaseControl/Coronavirus.aspx)
 * Coronavirus reporting by the [Santa Cruz Sentinel](https://www.santacruzsentinel.com/tag/coronavirus/)
-* Last updated using data from July 4, 2020
+* Last updated using data from July 5, 2020
 
 **Solano**
 
